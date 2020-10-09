@@ -1,0 +1,9 @@
+<nav search_view="search">
+  <view name="aws_ec2"/>
+  <view name="azure"/>
+  <view name="gcp" />
+	<view name="sim_smartagent" />
+  <view name="sai_hosts"/>
+  <view name="docker"/>
+  <view name="search" />
+</nav>
