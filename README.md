@@ -1,4 +1,4 @@
-# Splunk SignalFX Dashboards App
+# Splunk SIM Dashboards App
 
 ## Prerequisite 
 * Install [nodejs](https://nodejs.org/en/) 10.x.
