@@ -6,6 +6,7 @@ import IconRegistry from '@splunk/dashboard-context/IconRegistry';
 import LocalIconProvider from '@splunk/dashboard-context/LocalIconProvider';
 import StandardIconProvider from '@splunk/dashboard-context/StandardIconProvider';
 import EnterprisePreset, { themes as presetThemes } from '@splunk/dashboard-presets/EnterprisePreset';
+import CustomPreset from './CustomPreset'
 import SourceEditor, { themes as sourceEditorThemes } from '@splunk/dashboard/DashboardSourceEditor';
 import { themes as reactUIThemes } from '@splunk/react-ui/themes';
 import WaitSpinner from '@splunk/react-ui/WaitSpinner';
@@ -34,11 +35,9 @@ import T from 'prop-types';
 
 import { prettyJsonString, openQueryInSearch } from '../utils';
 import ThemeButton from './ThemeButton';
-import { MyCollector } from './MetricsCollector';
 import useView from '../hooks/useView';
 
 const swaCollector = new SWACollector();
-const myCollector = new MyCollector();
 
 const BaseDashboard = ({ page }) => {
   const [mode, setMode] = useState('view');
@@ -194,7 +193,7 @@ const BaseDashboard = ({ page }) => {
         initialDefinition={definition}
         toolbarItems={toolbarMenus[mode]}
         actionMenus={actionMenus[mode]}
-        preset={EnterprisePreset}
+        preset={CustomPreset}
         dashboardApiRef={handleDashboardApiRef}
         dashboardPlugin={dashboardPlugin}
         initialTokenBinding={tokenBinding}
@@ -225,7 +224,7 @@ const BaseDashboard = ({ page }) => {
           enableVizSourceEditor: true,
           enableVizIdEditor: true,
         }}
-        metricsCollectors={[swaCollector, myCollector]}
+        metricsCollectors={[swaCollector]}
       >
         <ThemeProvider theme={theme}>{body}</ThemeProvider>
         <ToastMessages />
