@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useMemo, useCallback }  from 'react';
 import isEmpty from 'lodash/isEmpty';
 import Multiselect from '@splunk/react-ui/Multiselect';
-import { withInputWrapper } from './Wrapper';
+import { withCustomInputWrapper } from './Wrapper';
 
 const toValue = arr => (arr ? arr.join(',') : '');
 
@@ -20,14 +20,21 @@ const CustomMultiInput = ({
 
     const [values, setValues] = useState([defaultValue]);
     const multiselectOptions = useMemo(() => {
-        if (dataSources.primary.data !== null) {
+
+        if (dataSources.primary === undefined)
+            return
+
+        if (dataSources.primary.data !== null && dataSources.primary.data.columns.length !== 0) {
             const primary = dataSources.primary.data.columns;
+            
             const label = eval(encoding.label)
             const value = eval(encoding.value)
 
-            return label.map((item,idx) => (
-                <Multiselect.Option label={item} value={value[idx]} />
-            ));
+            if(label !== undefined && value !== undefined){
+                return label.map((item,idx) => (
+                    <Multiselect.Option label={item} value={value[idx]} />
+                ));
+            }
         }
     }, [dataSources]);
 
@@ -83,4 +90,4 @@ CustomMultiInput.valueToTokens = (value, { token }) => {
 };
 
 
-export default withInputWrapper(CustomMultiInput);
+export default withCustomInputWrapper(CustomMultiInput);

@@ -53,7 +53,7 @@ const InputErrorIconContainer = styled.div.attrs(() => ({
     color: ${themeRegistry.themeVariable('errorIconColor')};
 `;
 
-export const withInputWrapper = CustomMultiInputComponent => {
+export const withCustomInputWrapper = CustomMultiInputComponent => {
     const WrappedComponent = ({
         mode,
         title,
@@ -132,6 +132,6 @@ export const withInputWrapper = CustomMultiInputComponent => {
     return WrappedComponent;
 };
 
-withInputWrapper.propTypes = {
-    InputComponent: T.element,
+withCustomInputWrapper.propTypes = {
+    withCustomInputWrapper: T.element,
 };
