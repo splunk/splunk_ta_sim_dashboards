@@ -10,7 +10,7 @@ const DashboardContainer = () => {
 };
 
 layout(<DashboardContainer />, {
-  pageTitle: 'Splunk SignalFX Dashboards',
+  pageTitle: 'Splunk Infrastructure Monitoring Dashboards',
   hideFooter: true,
   layout: 'fixed',
 });
