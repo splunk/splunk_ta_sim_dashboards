@@ -11,8 +11,6 @@ import SourceEditor, { themes as sourceEditorThemes } from '@splunk/dashboard/Da
 import { themes as reactUIThemes } from '@splunk/react-ui/themes';
 import WaitSpinner from '@splunk/react-ui/WaitSpinner';
 import { TelemetryContextProvider } from '@splunk/dashboard-telemetry/TelemetryContext';
-import { SWACollector } from '@splunk/dashboard-telemetry/SWACollector';
-
 import VisualizationGroup from '@splunk/dashboard-toolbar/groups/VisualizationGroup';
 import ControlGroup from '@splunk/dashboard-toolbar/groups/ControlGroup';
 import HistoryGroup from '@splunk/dashboard-toolbar/groups/HistoryGroup';
@@ -32,12 +30,9 @@ import ToastMessages from '@splunk/react-toast-notifications/ToastMessages';
 import Toaster, { makeCreateToast } from '@splunk/react-toast-notifications/Toaster';
 import { createSchemaBasedOnPresets } from '@splunk/dashboard-definition/DashboardSchema';
 import T from 'prop-types';
-
 import { prettyJsonString, openQueryInSearch } from '../utils';
 import ThemeButton from './ThemeButton';
 import useView from '../hooks/useView';
-
-const swaCollector = new SWACollector();
 
 const BaseDashboard = ({ page }) => {
   const [mode, setMode] = useState('view');
@@ -224,7 +219,6 @@ const BaseDashboard = ({ page }) => {
           enableVizSourceEditor: true,
           enableVizIdEditor: true,
         }}
-        metricsCollectors={[swaCollector]}
       >
         <ThemeProvider theme={theme}>{body}</ThemeProvider>
         <ToastMessages />
