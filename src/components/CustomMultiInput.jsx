@@ -2,6 +2,7 @@ import React, {useState, useEffect, useMemo, useCallback }  from 'react';
 import isEmpty from 'lodash/isEmpty';
 import Multiselect from '@splunk/react-ui/Multiselect';
 import { withCustomInputWrapper } from './Wrapper';
+import WaitSpinner from '@splunk/react-ui/WaitSpinner';
 
 const toValue = arr => (arr ? arr.join(',') : '');
 
@@ -19,24 +20,38 @@ const CustomMultiInput = ({
 }) => {
 
     const [values, setValues] = useState([defaultValue]);
+    const [searchStatusMessage,setStatusMessage] = useState("");
+
     const multiselectOptions = useMemo(() => {
 
-        if (dataSources.primary === undefined)
-            return
-
-        if (dataSources.primary.data !== null && dataSources.primary.data.columns.length !== 0) {
-            const primary = dataSources.primary.data.columns;
+        if(!isLoading){
+            if (isEmpty(dataSources) || dataSources.primary === undefined || dataSources.primary.data === null){
+                setStatusMessage("Error occured with dataSource");
+                return true
+            }
             
-            const label = eval(encoding.label)
-            const value = eval(encoding.value)
+            if(dataSources.primary.data.columns.length === 0){
+                setStatusMessage(dataSources.primary.meta.statusMessage);
+                return true
+            }
 
-            if(label !== undefined && value !== undefined){
+            if(dataSources.primary.meta.isDone == true){
+                const primary = dataSources.primary.data.columns;
+                const label = eval(encoding.label)
+                const value = eval(encoding.value)
+                
+                if(label === undefined || value === undefined){
+                    setStatusMessage("Error occured in encoding, ensure proper format (e.g. primary[0])");
+                    return true
+                }
+                
                 return label.map((item,idx) => (
                     <Multiselect.Option label={item} value={value[idx]} />
                 ));
             }
         }
-    }, [dataSources]);
+
+    }, [dataSources, isLoading]);
 
     const handleValueChange = useCallback(
         (evt, { values }) => {
@@ -53,24 +68,29 @@ const CustomMultiInput = ({
     const loadingMessage = "Loading menu items...";
 
     return (
-        <Multiselect 
-        values={values} 
-        inline 
-        compact 
-        onChange={handleValueChange} 
-        placeholder={placeholder} 
-        isLoadingOptions={isLoading} 
-        loadingMessage={loadingMessage} 
-        disabled={isDisabled || isError}
-        animateLoading
-        >
-            {!isEmpty(items) &&
-                items.map(({ label, value }) => (
-                    <Multiselect.Option label={label} value={value} />
-                ))
-            }
-            {multiselectOptions}
-        </Multiselect>
+        <div>
+        {!multiselectOptions && <div><WaitSpinner size="medium" screenReaderText={loadingMessage} /> </div>}
+        {multiselectOptions &&
+            <Multiselect 
+                values={values} 
+                inline 
+                compact 
+                onChange={handleValueChange} 
+                placeholder={placeholder} 
+                isLoadingOptions={isLoading} 
+                loadingMessage={loadingMessage} 
+                disabled={isDisabled || isError}
+                footerMessage={searchStatusMessage}
+            >
+                {!isEmpty(items) &&
+                    items.map(({ label, value }) => (
+                        <Multiselect.Option label={label} value={value} />
+                    ))
+                }
+                {multiselectOptions}
+            </Multiselect>
+        }
+        </div>
     );
 }
 
